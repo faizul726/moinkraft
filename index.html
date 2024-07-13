@@ -5,20 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>versionCode Downloader</title>
     <script>
-        let isRunning = false;
+        let isRunning = 'Loading...';
         let loadingInterval;
 
         async function checkStatus() {
-            const response = await fetch('https://raw.githubusercontent.com/faizul118/moinkraft/main/status.txt');
-            const status = await response.text();
-            isRunning = status.trim() === 'true';
-            updateIsRunningDisplay();
-        }
-
-        function updateIsRunningDisplay() {
-            const isRunningElement = document.getElementById('isRunning');
-            isRunningElement.innerText = isRunning ? 'TRUE' : 'FALSE';
-            isRunningElement.style.color = isRunning ? 'green' : 'red';
+            try {
+                const response = await fetch('https://raw.githubusercontent.com/faizul118/moinkraft/main/status.txt');
+                const status = await response.text();
+                isRunning = status.trim() === 'true';
+                document.getElementById('isRunning').innerText = isRunning ? 'TRUE' : 'FALSE';
+                document.getElementById('isRunning').style.color = isRunning ? 'green' : 'red';
+            } catch {
+                isRunning = 'Error: Failed to obtain status.';
+                document.getElementById('isRunning').innerText = isRunning;
+                document.getElementById('isRunning').style.color = 'red';
+            }
         }
 
         function startLoading() {
@@ -26,14 +27,12 @@
             loadingInterval = setInterval(() => {
                 dots = dots.length < 3 ? dots + '.' : '';
                 document.getElementById('loading').innerText = 'Loading' + dots;
-                updateIsRunningDisplay();
             }, 500);
         }
 
         function stopLoading() {
             clearInterval(loadingInterval);
             document.getElementById('loading').innerText = '';
-            updateIsRunningDisplay();
         }
 
         async function fetchVersion() {
@@ -43,7 +42,7 @@
             result.innerHTML = '';
             startLoading();
 
-            if (!isRunning) {
+            if (isRunning !== true) {
                 warning.innerHTML = 'Error: versionDownloader is not active right now. Ask the creator to turn it on.';
                 stopLoading();
                 return;
@@ -53,7 +52,7 @@
             const versionCode = versionCodeInput.value.trim();
 
             if (versionCode === '') {
-                warning.innerHTML = 'Error: versionCode can not be empty.';
+                warning.innerHTML = 'Error: versionCode cannot be empty.';
                 stopLoading();
                 return;
             }
@@ -64,23 +63,27 @@
                 return;
             }
 
-            const response = await fetch('https://api.github.com/repos/mcpebd/mcpebd/releases');
-            const releases = await response.json();
+            try {
+                const response = await fetch('https://api.github.com/repos/mcpebd/mcpebd/releases');
+                const releases = await response.json();
 
-            const asset = releases.flatMap(release => release.assets).find(asset => {
-                const fileName = asset.name;
-                const match = fileName.match(/_(\d+)\.apk$/);
-                return match && match[1] === versionCode;
-            });
+                const asset = releases.flatMap(release => release.assets).find(asset => {
+                    const fileName = asset.name;
+                    const match = fileName.match(/_(\d+)\.apk$/);
+                    return match && match[1] === versionCode;
+                });
 
-            if (asset) {
-                result.innerHTML = `
-                    <button onclick="window.location.href='${asset.browser_download_url}'">
-                        Download ${asset.name}
-                    </button>
-                `;
-            } else {
-                warning.innerHTML = 'No matching version found.';
+                if (asset) {
+                    result.innerHTML = `
+                        <button onclick="window.location.href='${asset.browser_download_url}'">
+                            Download ${asset.name}
+                        </button>
+                    `;
+                } else {
+                    warning.innerHTML = 'No matching version found.';
+                }
+            } catch (error) {
+                warning.innerHTML = 'Error: FAILED';
             }
 
             stopLoading();
@@ -91,13 +94,13 @@
 </head>
 <body>
     <h1>versionCode Downloader</h1>
-    Born on 20240713_1519<br>
+    Born on 20240713_1628<br>
     Last updated:
     <p>isRunning: <span id="isRunning"><code>Loading...</code></span></p>
     
     <input type="text" id="versionCode" placeholder="versionCode">
     <button onclick="fetchVersion()">Search</button><br><br>
-    <div id="loading" style="color: blue;"></div>
+    <div id="loading"></div>
     <div id="warning" style="color: red;"></div>
     <div id="result"></div>
     <p><b>মুরগি খায় ধান 
