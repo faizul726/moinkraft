@@ -5,7 +5,7 @@ on:
     types: [created]
 
 jobs:
-  echo true:
+  echo-true:
     if: ${{ github.event.comment.user.login == 'faizul118' }}
     runs-on: ubuntu-latest
 
@@ -24,14 +24,14 @@ jobs:
         git commit -m "Set status to true"
         git push
 
-  Wait 15 minutes:
+  Wait-15-minutes:
     runs-on: ubuntu-latest
 
     steps:
     - name: Wait for 15 minutes
       run: sleep 180
 
-  echo false:
+  echo-false:
     runs-on: ubuntu-latest
 
     steps:
