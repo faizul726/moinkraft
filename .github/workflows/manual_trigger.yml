@@ -24,17 +24,16 @@ jobs:
         git commit -m "Set status to true"
         git push
 
-  Wait-15-minutes:
+  wait15mins-then-echo-false:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Wait for 15 minutes
+      - name: Wait for 15 minutes
       run: sleep 180
 
-  echo-false:
-    runs-on: ubuntu-latest
+    - name: Checkout repository
+      uses: actions/checkout@v4
 
-    steps:
     - name: echo false
       run: echo false > status.txt
 
