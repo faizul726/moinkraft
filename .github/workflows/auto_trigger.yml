@@ -1,4 +1,4 @@
-name: Set IsRunning = false
+name: Auto Trigger
 
 on:
   push:
