@@ -5,7 +5,7 @@ on:
     types: [created]
 
 jobs:
-  update_status:
+  echo true:
     if: ${{ github.event.comment.user.login == 'faizul118' }}
     runs-on: ubuntu-latest
 
@@ -24,12 +24,11 @@ jobs:
         git commit -m "Set status to true"
         git push
 
+  Wait 15 minutes:
     - name: Wait for 15 minutes
       run: sleep 180
 
-    - name: Checkout repository
-      uses: actions/checkout@v4
-
+  echo false:
     - name: echo false
       run: echo false > status.txt
 
