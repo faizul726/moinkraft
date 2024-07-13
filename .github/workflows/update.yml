@@ -19,8 +19,6 @@ jobs:
           git commit -m "Test commit"
 
       - name: Push changes
-      with: 
-      ssh-key: ${{secrets.YOUR_SECRET_KEY}}
         run: |
-          git remote set-url origin https://x-access-token:${{ secrets.PAT }}@github.com/${{ github.repository }}.git
+          git remote set-url origin https://x-access-token:${{ secrets.SECRET }}@github.com/${{ github.repository }}.git
           git push origin main
