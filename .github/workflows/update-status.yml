@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+    paths:
+      - status.txt
 
 jobs:
   wait_and_update:
