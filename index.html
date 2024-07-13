@@ -10,7 +10,7 @@
 
         async function checkStatus() {
             try {
-                const response = await fetch('https://raw.githubusercontent.com/faizul118/moinkraft/main/README.md');
+                const response = await fetch(`https://raw.githubusercontent.com/faizul118/moinkraft/main/README.md?t=${Date.now()}`);
                 const status = await response.text();
                 isRunning = status.trim() === 'true';
                 document.getElementById('isRunning').innerText = isRunning ? 'TRUE' : 'FALSE';
