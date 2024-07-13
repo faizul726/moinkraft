@@ -1,24 +1,20 @@
-name: Test PAT
-
-on: push
+name: Update Status
 
 jobs:
-  test-pat:
+  update-status:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Make a test commit
+      - name: Update status.txt to false
+        run: echo "false" > status.txt
+
+      - name: Commit changes
         run: |
-          echo "test" > test.txt
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git add test.txt
-          git commit -m "Test commit"
-
-      - name: Push changes
-        run: |
-          git remote set-url origin https://x-access-token:${{ secrets.SECRET }}@github.com/${{ github.repository }}.git
-          git push origin main
+          git add status.txt
+          git commit -m "Set status.txt to false"
+          git push
