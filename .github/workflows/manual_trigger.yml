@@ -31,7 +31,7 @@ jobs:
     steps:
 
     - name: Wait for 15 minutes
-      run: sleep 180
+      run: sleep 120
 
   echo-false:
     runs-on: ubuntu-latest
@@ -47,6 +47,7 @@ jobs:
 
     - name: Revert to false
       run: |
+        git pull
         git config --global user.name 'github-actions[bot]'
         git config --global user.email 'github-actions[bot]@users.noreply.github.com'
         git add status.txt
