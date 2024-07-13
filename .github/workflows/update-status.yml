@@ -9,14 +9,14 @@ jobs:
   wait_and_update:
     runs-on: ubuntu-latest
     steps:
-      - name: Wait for 60 minutes
-        run: sleep 3600
+      - name: Wait for 30 minutes
+        run: sleep 1800
 
       - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Update status.txt
-        run: echo "false" > status.txt
+        run: echo false > status.txt
 
       - name: Commit changes
         run: |
