@@ -1,4 +1,4 @@
-name: Revert to isRunning=false
+name: Set IsRunning = false
 
 on:
   push:
@@ -9,16 +9,17 @@ jobs:
   update-status:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
 
-      - name: echo false
-        run: echo false > status.txt
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Commit changes
+      - name: Update status.txt
+        run: echo "false" > status.txt
+
+      - name: Revert to false
         run: |
-          git config --local user.email "action@github.com"
           git config --local user.name "github-actions"
+          git config --local user.email "github-actions@github.com"
           git add status.txt
           git commit -m "Revert to false"
           git push
