@@ -1,4 +1,4 @@
-name: Update Status
+name: Revert to isRunning=false
 
 on:
   push:
@@ -12,7 +12,7 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Update status.txt
+      - name: echo false
         run: echo false > status.txt
 
       - name: Commit changes
@@ -20,5 +20,5 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "github-actions"
           git add status.txt
-          git commit -m "Update status.txt to false"
+          git commit -m "Revert to false"
           git push
