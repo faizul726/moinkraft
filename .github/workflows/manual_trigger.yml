@@ -25,10 +25,16 @@ jobs:
         git push
 
   Wait 15 minutes:
+    runs-on: ubuntu-latest
+
+    steps:
     - name: Wait for 15 minutes
       run: sleep 180
 
   echo false:
+    runs-on: ubuntu-latest
+
+    steps:
     - name: echo false
       run: echo false > status.txt
 
