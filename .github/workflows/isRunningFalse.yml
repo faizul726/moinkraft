@@ -1,4 +1,4 @@
-name: revert
+name: Set isRunning=false
 
 on:
   workflow_dispatch:
@@ -14,17 +14,13 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: echo true
-      run: |
-        whoami
-        echo '{"bool": false, "date": "'$(date)'" }' > status.json
+    - name: echo false
+      run: echo false > status
 
-
-
-    - name: Set false
+    - name: Set isRunning=false
       run: |
         git config --global user.name 'github-actions[bot]'
         git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-        git add status.json
-        git commit -m "Set status to true"
+        git add status
+        git commit -m "হাছা কতা"
         git push --force
