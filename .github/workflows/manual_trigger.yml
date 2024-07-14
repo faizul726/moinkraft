@@ -21,6 +21,8 @@ jobs:
           owner: faizul118
           repo: moinkraft
           description: true
+          env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 # jobs:
 #   echo-true:
