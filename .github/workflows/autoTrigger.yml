@@ -37,7 +37,7 @@ jobs:
 
   echo-false:
     runs-on: ubuntu-latest
-    needs: wait-15mins
+    needs: wait-30-mins
 
     steps:
     - name: Checkout repository
