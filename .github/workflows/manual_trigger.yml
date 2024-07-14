@@ -2,77 +2,56 @@ name: Semi-auto trigger
 
 on:
   workflow_dispatch:
-
-# on:
-#  issue_comment:
-#    types: [created]
+  issue_comment:
+    types: [created]
 
 jobs:
-  update-description:
+  echo-true:
+    if: ${{ github.event_name == 'workflow_dispatch' || (github.event_name == 'issue_comment' && github.event.comment.user.login == 'faizul118') }}
     runs-on: ubuntu-latest
-#    if: ${{ github.event.comment.user.login == 'faizul118' }}
-
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+    - name: Checkout repository
+      uses: actions/checkout@v4
 
-      - name: Update description to true
-        uses: octokit/request-action@v2.3.1
-        with:
-          route: PUT /repos/{owner}/{repo}
-          owner: faizul118
-          repo: moinkraft
-          description: true
-          mediaType: '{"previews": ["mercy"]}'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: echo true
+      run: echo true > status.txt
 
-# jobs:
-#   echo-true:
-#     if: ${{ github.event.comment.user.login == 'faizul118' }}
-#     runs-on: ubuntu-latest
+    - name: Set true
+      run: |
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        git add status.txt
+        git commit -m "Set status to true"
+        git push --force
 
-#     steps:
-#     - name: Checkout repository
-#       uses: actions/checkout@v4
+  wait-15mins:
+    runs-on: ubuntu-latest
+    needs: echo-true
 
-#     - name: echo true
-#       run: echo true > status.txt
+    steps:
 
-#     - name: Set true
-#       run: |
-#         git config --global user.name 'github-actions[bot]'
-#         git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-#         git add status.txt
-#         git commit -m "Set status to true"
-#         git push --force
+    - name: Wait for 15 minutes
+      run: sleep 180
 
-#   wait-15mins:
-#     runs-on: ubuntu-latest
-#     needs: echo-true
+  echo-false:
+    runs-on: ubuntu-latest
+    needs: wait-15mins
 
-#     steps:
-#     - name: Wait for 15 minutes
-#       run: sleep 180
+    steps:
 
-#   echo-false:
-#     runs-on: ubuntu-latest
-#     needs: wait-15mins
+    - name: Checkout repository
+      uses: actions/checkout@v4
 
-#     steps:
-#     - name: Checkout repository
-#       uses: actions/checkout@v4
+    - name: echo false
+      run: |
+        git pull
+        echo false > status.txt
 
-#     - name: echo false
-#       run: |
-#         git pull
-#         echo false > status.txt
-
-#     - name: Revert to false
-#       run: |
-#         git config --global user.name 'github-actions[bot]'
-#         git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-#         git add status.txt
-#         git commit -m "Revert to false"
-#         git push --force
+    - name: Revert to false
+      run: |
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        git add status.txt
+        git commit -m "Revert to false"
+        git push --force
