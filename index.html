@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>versionCode Downloader</title>
+    <script>
+      let isRunning = 'Loading...';
+      let loadingInterval;
+      async function checkStatus() {
+        try {
+          const response = await fetch(`https://api.github.com/repos/faizul118/moinkraft/contents/status`);
+          const status = await response.json();
+          const content = status.content.trim();
+          isRunning = content === 'dHJ1ZQo=';
+          document.getElementById('isRunning').innerText = isRunning ? 'TRUE' : 'FALSE';
+          document.getElementById('isRunning').style.color = isRunning ? 'green' : 'red';
+        } catch {
+          isRunning = 'Error: Failed to obtain status.';
+          document.getElementById('isRunning').innerText = isRunning;
+          document.getElementById('isRunning').style.color = 'red';
+        }
+      }
+
+      function startLoading() {
+        let dots = '';
+        loadingInterval = setInterval(() => {
+          dots = dots.length < 3 ? dots + '.' : '';
+          document.getElementById('loading').innerText = 'Loading' + dots;
+        }, 500);
+      }
+
+      function stopLoading() {
+        clearInterval(loadingInterval);
+        document.getElementById('loading').innerText = '';
+      }
+      async function fetchVersion() {
+        const result = document.getElementById('result');
+        const warning = document.getElementById('warning');
+        warning.innerHTML = '';
+        result.innerHTML = '';
+        startLoading();
+        if (isRunning !== true) {
+          warning.innerHTML = 'Error: versionDownloader is not active right now. Ask the creator to turn it on.';
+          stopLoading();
+          return;
+        }
+        const versionCodeInput = document.getElementById('versionCode');
+        const versionCode = versionCodeInput.value.trim();
+        if (versionCode === '') {
+          warning.innerHTML = 'Error: versionCode cannot be empty.';
+          stopLoading();
+          return;
+        }
+        if (!/^\d+$/.test(versionCode)) {
+          warning.innerHTML = 'Error: Enter valid versionCode.';
+          stopLoading();
+          return;
+        }
+        try {
+          const response = await fetch('https://api.github.com/repos/mcpebd/mcpebd/releases');
+          const releases = await response.json();
+          const asset = releases.flatMap(release => release.assets).find(asset => {
+            const fileName = asset.name;
+            const match = fileName.match(/_(\d+)\.apk$/);
+            return match && match[1] === versionCode;
+          });
+          if (asset) {
+            result.innerHTML = `
+                        
+					<button onclick="window.location.href='${asset.browser_download_url}'">
+                            Download ${asset.name}
+                        </button>
+                    `;
+          } else {
+            warning.innerHTML = 'No matching version found.';
+          }
+        } catch (error) {
+          warning.innerHTML = 'Error: FAILED';
+        }
+        stopLoading();
+      }
+      window.onload = checkStatus;
+    </script>
+  </head>
+  <body>
+    <h1>versionCode Downloader</h1> Born on 20240714_1700 <br> Last updated: <p>isRunning: <span id="isRunning">
+        <code>Loading...</code>
+      </span>
+    </p>
+    <input type="text" id="versionCode" placeholder="versionCode">
+    <button onclick="fetchVersion()">Search</button>
+    <br>
+    <br>
+    <div id="loading"></div>
+    <div id="warning" style="color: red;"></div>
+    <div id="result"></div>
+    <p>
+      <b>মুরগি খায় ধান <img src="1f927.png" alt="🤧" style="width: 1em; height: 1em; vertical-align: middle; pointer-events: none;">
+        <img src="1f438.png" alt="🐸" style="width: 1em; height: 1em; vertical-align: middle; pointer-events: none;">
+      </b>
+      <span style="opacity: 0.125;">
+        <i>তুমি আমার জান</i>
+      </span>
+    </p>
+    <img alt="GitHub Actions Workflow Status" src="https://img.shields.io/github/actions/workflow/status/faizul118/moinkraft/autoTrigger.yml?style=plastic&label=Automation">
+  </body>
+</html>
