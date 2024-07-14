@@ -20,7 +20,7 @@ jobs:
           route: PUT /repos/{owner}/{repo}
           owner: faizul118
           repo: moinkraft
-          description: "true"
+          description: true
 
 # jobs:
 #   echo-true:
