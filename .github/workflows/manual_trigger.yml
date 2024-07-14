@@ -16,8 +16,8 @@ jobs:
 
     - name: echo true
       run: |
-      whoami
-      echo '{"bool": true, "date": "'$(date)'" }' > status.json
+        whoami
+        echo '{"bool": true, "date": "'$(date)'" }' > status.json
 
 
 
