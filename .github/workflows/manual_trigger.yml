@@ -15,7 +15,8 @@ jobs:
       uses: actions/checkout@v4
 
     - name: echo true
-      run: echo '{"bool": true, "date": "'$(date)'" }' > status.json
+      run: echo "{\"bool\": true, \"date\": \"$(date)\"}" > status.json
+
 
     - name: Set true
       run: |
