@@ -31,7 +31,7 @@ jobs:
     needs: echo-true
 
     steps:
-    - name: Wait for 15 minutes
+    - name: Wait 30 minutes
       run: sleep 1800
 
 
