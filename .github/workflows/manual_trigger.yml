@@ -1,27 +1,31 @@
 name: Semi-auto trigger
 
 on:
-  issue_comment:
-    types: [created]
+  workflow_dispatch:
+
+# on:
+#  issue_comment:
+#    types: [created]
 
 jobs:
   update-description:
     runs-on: ubuntu-latest
-    if: ${{ github.event.comment.user.login == 'faizul118' }}
+#    if: ${{ github.event.comment.user.login == 'faizul118' }}
 
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Update repository description
+      - name: Update description to true
         uses: octokit/request-action@v2.3.1
         with:
           route: PUT /repos/{owner}/{repo}
           owner: faizul118
           repo: moinkraft
           description: true
-          env:
+          mediaType: '{"previews": ["mercy"]}'
+        env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 # jobs:
