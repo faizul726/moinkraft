@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Update repository description
-        uses: octokit/request-action@v2
+        uses: octokit/request-action@latest
         with:
           route: PUT /repos/{owner}/{repo}
           owner: faizul118
